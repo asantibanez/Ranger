@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="Ranger">
+
+        <!-- Behaviour attributes -->
+        <attr name="displayDayOfWeek" format="boolean"/>
+        <attr name="alwaysDisplayMonth" format="boolean"/>
+
+        <!-- Days Container styling -->
+        <attr name="daysContainerBackgroundColor" format="color"/>
+
+        <attr name="dayTextColor" format="color"/>
+        <attr name="selectedDayTextColor" format="color"/>
+        <attr name="selectedDayBackgroundColor" format="color"/>
+
+        <!-- Day View styling -->
+        <attr name="dayOfWeekTextColor" format="color" />
+        <attr name="dayNumberTextColor" format="color" />
+        <attr name="monthNameTextColor" format="color" />
+
+    </declare-styleable>
+
+</resources>

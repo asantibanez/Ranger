@@ -1,0 +1,50 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Default"/>
+
+    <com.andressantibanez.ranger.Ranger
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbarSize="4dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Styled"/>
+
+    <com.andressantibanez.ranger.Ranger
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbarSize="4dp"
+        app:daysContainerBackgroundColor="#1C6B8D"
+        app:dayTextColor="#dddddd"
+        app:selectedDayTextColor="#eeeeee"
+        app:selectedDayBackgroundColor="#FF6600"
+        app:displayDayOfWeek="true"
+        app:alwaysDisplayMonth="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="With Listener"/>
+
+    <com.andressantibanez.ranger.Ranger
+        android:id="@+id/ranger"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbarSize="4dp"
+        app:daysContainerBackgroundColor="#73B05C"
+        app:dayTextColor="#eeeeee"
+        app:selectedDayTextColor="#444444"
+        app:selectedDayBackgroundColor="#FFAA4D"
+        app:displayDayOfWeek="true"/>
+
+
+</LinearLayout>
