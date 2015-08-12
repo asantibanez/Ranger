@@ -8,8 +8,7 @@
     android:paddingTop="8dp"
     android:paddingBottom="8dp"
     android:paddingLeft="12dp"
-    android:paddingRight="12dp"
-    tools:background="#1C6B8D">
+    android:paddingRight="12dp">
 
     <TextView
         android:id="@+id/day_of_week"
@@ -17,7 +16,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:textSize="12sp"
-        android:textColor="#fff"
         android:textAllCaps="true"
         tools:text="jue."/>
 
@@ -28,9 +26,7 @@
         android:padding="4dp"
         android:textSize="16sp"
         android:layout_gravity="center_horizontal"
-        tools:text="30"
-        android:textColor="#fff"
-        tools:background="#FF6600"/>
+        tools:text="30"/>
 
     <TextView
         android:id="@+id/month_short_name"
@@ -38,7 +34,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:textSize="12sp"
-        android:textColor="#fff"
         tools:text="Ago."/>
 
 </LinearLayout>
