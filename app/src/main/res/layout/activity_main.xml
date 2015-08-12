@@ -10,6 +10,7 @@
         android:text="Default"/>
 
     <com.andressantibanez.ranger.Ranger
+        android:id="@+id/default_ranger"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbarSize="4dp"/>
@@ -20,6 +21,7 @@
         android:text="Styled"/>
 
     <com.andressantibanez.ranger.Ranger
+        android:id="@+id/styled_ranger"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbarSize="4dp"
@@ -36,7 +38,7 @@
         android:text="With Listener"/>
 
     <com.andressantibanez.ranger.Ranger
-        android:id="@+id/ranger"
+        android:id="@+id/listener_ranger"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbarSize="4dp"

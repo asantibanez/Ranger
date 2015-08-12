@@ -22,7 +22,6 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
 
     public final static String TAG = Ranger.class.getSimpleName();
 
-
     /**
      * Constants
      */
@@ -34,6 +33,9 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
     public static final int DAY_OF_WEEK_RES_ID = R.id.day_of_week;
     public static final int DAY_NUMBER_RES_ID = R.id.day_number;
     public static final int MONTH_NAME_RES_ID = R.id.month_short_name;
+    //Delay
+    public static final int DELAY_SELECTION = 300;
+    public static final int NO_DELAY_SELECTION = 0;
 
 
     /**
@@ -66,6 +68,7 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
 
     //Day View
     DayView mSelectedDayView;
+
 
     /**
      * Controls
@@ -144,13 +147,8 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
         //Render control
         render();
 
-        //Set Selection. Default is today. Must post delayed
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                setSelectedDay(currentDateTime.getDayOfMonth());
-            }
-        }, 300);
+        //Set Selection. Default is today.
+        setSelectedDay(currentDateTime.getDayOfMonth(), false, DELAY_SELECTION);
     }
 
 
@@ -172,22 +170,33 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
         mEndDate = new LocalDateTime(year, month, day, 0, 0, 0);
     }
 
-    public void setSelectedDay(int day) {
-        //Deselect day selected
-        if(mSelectedDay > 0)
-            unSelectDay(mSelectedDay);
+    public void setSelectedDay(final int day, final boolean notifyListeners, long delay) {
+        //Post delayed 300 ms at most because of redraw
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //Deselect day selected
+                if(mSelectedDay > 0)
+                    unSelectDay(mSelectedDay);
 
-        //Set selected day
-        mSelectedDay = day;
-        selectDay(mSelectedDay);
+                //Set selected day
+                mSelectedDay = day;
+                selectDay(mSelectedDay);
 
-        //Scroll to DayView
-        scrollToDayView(mSelectedDayView);
+                //Scroll to DayView
+                scrollToDayView(mSelectedDayView);
 
-        //Call listener
-        if(mListener != null)
-            mListener.onDaySelected(mSelectedDay);
+                //Call listener
+                if(notifyListeners && mListener != null)
+                    mListener.onDaySelected(mSelectedDay);
+            }
+        }, delay);
     }
+
+    public int getSelectedDay() {
+        return mSelectedDay;
+    }
+
 
     /**
      * Ui
@@ -246,7 +255,7 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
         mDaysContainer.addView(mRightSpace);
     }
 
-    public void unSelectDay(int day) {
+    private void unSelectDay(int day) {
         for (int i = 1; i < mDaysContainer.getChildCount() - 1; i++) {
             DayView dayView = new DayView(mDaysContainer.getChildAt(i));
             if(dayView.getDay() == day) {
@@ -257,7 +266,7 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
         }
     }
 
-    public void selectDay(int day) {
+    private void selectDay(int day) {
         for (int i = 1; i < mDaysContainer.getChildCount() - 1; i++) {
             DayView dayView = new DayView(mDaysContainer.getChildAt(i));
             if(dayView.getDay() == day) {
@@ -289,7 +298,7 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
 
         //Get selected day and set selection
         int selectedDay = dayView.getDay();
-        setSelectedDay(selectedDay);
+        setSelectedDay(selectedDay, true, NO_DELAY_SELECTION);
     }
 
 
@@ -323,8 +332,8 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
 
         SavedState savedState = new SavedState(superState);
         savedState.setSelectedDay(mSelectedDay);
-        savedState.setStartDateMillis(mStartDate.getMillisOfDay());
-        savedState.setEndDateMillis(mStartDate.getMillisOfDay());
+        savedState.setStartDateString(mStartDate.toString());
+        savedState.setEndDateString(mEndDate.toString());
 
         return savedState;
     }
@@ -335,12 +344,18 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
         super.onRestoreInstanceState(savedState.getSuperState());
 
         mSelectedDay = savedState.getSelectedDay();
+        mStartDate = LocalDateTime.parse(savedState.getStartDateString());
+        mEndDate = LocalDateTime.parse(savedState.getEndDateDateString());
+
+        render();
+
+        setSelectedDay(mSelectedDay, false, DELAY_SELECTION);
     }
 
     protected static class SavedState extends BaseSavedState {
         int mSelectedDay;
-        int mStartDateMillisOfDay;
-        int mEndDateMillisOfDay;
+        String mStartDateString;
+        String mEndDateString;
 
         public SavedState(Parcelable superState) {
             super(superState);
@@ -349,16 +364,16 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
         public SavedState(Parcel in) {
             super(in);
             mSelectedDay = in.readInt();
-            mStartDateMillisOfDay = in.readInt();
-            mEndDateMillisOfDay = in.readInt();
+            mStartDateString = in.readString();
+            mEndDateString = in.readString();
         }
 
         @Override
         public void writeToParcel(Parcel out, int flags) {
             super.writeToParcel(out, flags);
             out.writeInt(mSelectedDay);
-            out.writeInt(mStartDateMillisOfDay);
-            out.writeInt(mEndDateMillisOfDay);
+            out.writeString(mStartDateString);
+            out.writeString(mEndDateString);
         }
 
         public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<SavedState>() {
@@ -374,16 +389,24 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
             mSelectedDay = selectedDay;
         }
 
-        public void setStartDateMillis(int startDateMillis) {
-            mStartDateMillisOfDay = startDateMillis;
+        public void setStartDateString(String startDateString) {
+            mStartDateString = startDateString;
         }
 
-        public void setEndDateMillis(int endDateMillis) {
-            mEndDateMillisOfDay = endDateMillis;
+        public void setEndDateString(String endDateString) {
+            mEndDateString = endDateString;
         }
 
         public int getSelectedDay() {
             return mSelectedDay;
+        }
+
+        public String getStartDateString() {
+            return mStartDateString;
+        }
+
+        public String getEndDateDateString() {
+            return mEndDateString;
         }
     }
 

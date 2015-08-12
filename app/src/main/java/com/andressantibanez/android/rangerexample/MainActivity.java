@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Ranger ranger = (Ranger) findViewById(R.id.ranger);
+        Ranger ranger = (Ranger) findViewById(R.id.listener_ranger);
         ranger.setDayViewOnClickListener(new Ranger.DayViewOnClickListener() {
             @Override
             public void onDaySelected(int day) {
