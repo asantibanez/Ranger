@@ -1,4 +1,7 @@
 # Ranger
+
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Ranger-green.svg?style=flat)](https://android-arsenal.com/details/1/2340)
+
 Android horizontally scrolled DatePicker
 
 Background and text colors can be customized.
